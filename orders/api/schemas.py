@@ -11,6 +11,7 @@ from pydantic import (
     conint,
     field_validator,
     conlist,
+    Extra,
 )
 
 
@@ -34,6 +35,12 @@ class OrderItemSchema(BaseModel):
     size: Size
     quantity: Optional[conint(ge=1, strict=True)] = 1  # should integer
 
+    class Config:
+        extra = Extra.forbid
+        # We use Config to ban
+        # properties that haven’t been
+        # defined in the schema.
+
     @field_validator('quantity')
     @classmethod
     def quantity_non_nullable(cls, value: int):
@@ -43,6 +50,9 @@ class OrderItemSchema(BaseModel):
 
 class CreateOrderSchema(BaseModel):
     order: conlist(OrderItemSchema, min_length=1)
+
+    class Config:
+        extra = Extra.forbid
 
 
 class GetOrderSchema(CreateOrderSchema):
