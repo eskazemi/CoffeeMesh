@@ -63,3 +63,6 @@ class GetOrderSchema(CreateOrderSchema):
 
 class GetOrdersSchema(BaseModel):
     orders: List[GetOrderSchema]
+
+    class Config:
+        extra = Extra.forbid
